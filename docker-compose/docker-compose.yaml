@@ -1,0 +1,41 @@
+version: '3.3'
+services:
+  db:
+    build: ./mysql
+    image: mysql:latest
+    restart: always
+    volumes:
+      - ./mysql/initdb.d:/docker-entrypoint-initdb.d
+      - ./mysql/conf.d:/etc/mysql/conf.d/source
+      - ./mysql/log/mysql:/var/log/mysql
+    environment:
+      MYSQL_DATABASE: sample_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - 3306:3306
+    healthcheck:
+        test: mysqladmin ping -h 127.0.0.1 -u$$MYSQL_USER -p$$MYSQL_PASSWORD
+    networks:
+      - default
+  
+  flask:
+    build: ./backend
+    volumes:
+      - ./backend:/home
+    environment:
+      MYSQL_DATABASE: sample_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - 5000:5000
+    command: flask run --host 0.0.0.0 --port 5000
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - default
+networks:
+  app:
