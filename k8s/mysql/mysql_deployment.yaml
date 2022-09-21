@@ -29,22 +29,32 @@ spec:
         app: mysql
     spec:
       containers:
-      - image: mysql/mysql-server:5.6
-        name: mysql
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          valueFrom: 
-            secretKeyRef:
-              name: mysql-secret
-              key: password
-        ports:
-        - containerPort: 3306
+        - image: mysql:latest
           name: mysql
-        volumeMounts: # コンテナ内のどのディレクトリにpersistentVolumeをマウントするか
-        - name: mysql-persistent-storage
-          mountPath: /var/lib/mysql
+          env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom: 
+              secretKeyRef:
+                name: mysql-secret
+                key: mysql-root-password
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secret
+                key: mysql-user
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secret
+                key: mysql-password
+          ports:
+            - containerPort: 3306
+              name: mysql
+          volumeMounts: # コンテナ内のどのディレクトリにpersistentVolumeをマウントするか
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql
       volumes:
-      - name: mysql-persistent-storage
-        persistentVolumeClaim:
-          claimName: mysql-pv-claim
-          # name=mysql-pv-claimを使ってマウントできるPersistent Volumeを探す
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: mysql-pv-claim
+            # name=mysql-pv-claimを使ってマウントできるPersistent Volumeを探す
