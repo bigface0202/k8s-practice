@@ -16,7 +16,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mysql-pv-volume
+  name: mysql-pv-claim
 spec:
   # storageClassName = manual のPVを探してマウントする
   storageClassName: manual
