@@ -8,11 +8,11 @@ app = Flask(__name__)
 CORS(app)
 
 conn = mysql.connector.connect(
-    host = 'db',
+    host = 'mysql',
     port = 3306,
-    user = os.environ.get('MYSQL_USER'),
-    password = os.environ.get('MYSQL_PASSWORD'),
-    database = os.environ.get('MYSQL_DATABASE')
+    user = 'root',
+    password = 'password',
+    database = 'SAMPLE'
 )
 
 

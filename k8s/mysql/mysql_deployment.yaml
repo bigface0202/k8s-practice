@@ -29,7 +29,7 @@ spec:
         app: mysql
     spec:
       containers:
-        - image: mysql:latest
+        - image: myapp_mysql:latest
           name: mysql
           env:
           - name: MYSQL_ROOT_PASSWORD
