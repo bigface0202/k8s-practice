@@ -17,7 +17,7 @@ spec:
       containers:
       # Flask
       - name: server
-        image: myapp_flask:v1
+        image: myapp_flask
         imagePullPolicy: IfNotPresent
         command: [ "flask", "run", "--host", "0.0.0.0", "--port", "5000"]
         resources:
@@ -47,7 +47,7 @@ spec:
       
       # MySQL
       - name: mysql
-        image: myapp_mysql:v1
+        image: myapp_mysql
         imagePullPolicy: IfNotPresent
         resources:
           limits:
