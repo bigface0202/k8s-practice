@@ -28,8 +28,11 @@ spec:
       labels:
         app: mysql
     spec:
+      imagePullSecrets:
+        - name: artifact-registry
       containers:
-        - image: myapp_mysql
+        - image: asia-northeast1-docker.pkg.dev/sacred-lane-365413/kishi-reg/mysql:v1
+          imagePullPolicy: IfNotPresent
           name: mysql
           env:
           - name: MYSQL_ROOT_PASSWORD
@@ -53,6 +56,8 @@ spec:
           volumeMounts: # コンテナ内のどのディレクトリにpersistentVolumeをマウントするか
             - name: mysql-persistent-storage
               mountPath: /var/lib/mysql
+      nodeSelector: # Podを乗せるノードをラベルから指定できる
+        kubernetes.io/hostname: work01
       volumes:
         - name: mysql-persistent-storage
           persistentVolumeClaim:

@@ -17,7 +17,7 @@ spec:
       containers:
       # Flask
       - name: server
-        image: myapp_flask
+        image: asia-northeast1-docker.pkg.dev/sacred-lane-365413/kishi-reg/mysql:v1
         imagePullPolicy: IfNotPresent
         command: [ "flask", "run", "--host", "0.0.0.0", "--port", "5000"]
         resources:
@@ -47,8 +47,8 @@ spec:
       
       # MySQL
       - name: mysql
-        image: myapp_mysql
-        imagePullPolicy: IfNotPresent
+        image: myapp_mysql:v1
+        imagePullPolicy: Never
         resources:
           limits:
             cpu: "400m"
@@ -75,6 +75,8 @@ spec:
         volumeMounts:
         - name: mysql-persistent-storage
           mountPath: /var/lib/mysql
+      nodeSelector: # Podを乗せるノードをラベルから指定できる
+        kubernetes.io/hostname: work01
       
       # Volume
       volumes:
