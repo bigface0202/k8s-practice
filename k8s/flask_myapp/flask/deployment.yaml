@@ -49,6 +49,7 @@ spec:
         # MySQL
         - name: mysql
           image: mysql:latest
+          imagePullPolicy: IfNotPresent
           resources:
             limits:
               cpu: "400m"

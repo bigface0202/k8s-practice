@@ -10,7 +10,7 @@ CORS(app)
 conn = mysql.connector.connect(
     host = 'mysql',
     port = 3306,
-    user = 'root',
+    user = 'user',
     password = 'password',
     database = 'SAMPLE'
 )
