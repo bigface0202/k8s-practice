@@ -47,7 +47,7 @@ spec:
       
       # MySQL
       - name: mysql
-        image: myapp_mysql:v1
+        image: asia-northeast1-docker.pkg.dev/sacred-lane-365413/kishi-reg/mysql:v1
         imagePullPolicy: Never
         resources:
           limits:
