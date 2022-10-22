@@ -12,17 +12,16 @@ spec:
       labels:
         app: nginx
     spec:
-      restartPolicy: OnFailure
       imagePullSecrets:
         - name: artifact-registry
       containers:
         - name: nginx
-          image: bigface00/myapp:v1
+          image: asia-northeast1-docker.pkg.dev/sacred-lane-365413/kishi-reg/nginx:v1
           ports:
-          - containerPort: 80
+          - containerPort: 8080
           livenessProbe:
             httpGet:
-              port: 80
+              port: 8080
               path: /
             failureThreshold: 5
             periodSeconds: 5

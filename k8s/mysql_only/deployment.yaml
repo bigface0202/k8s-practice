@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysql-server
+  name: mysql
 spec:
   type: ClusterIP
   ports:
@@ -9,28 +9,36 @@ spec:
       port: 3306
       targetPort: 3306
       protocol: TCP
+  # deploymentが管理するpodを定義
+  # labelsにapp=mysqlと設定されたpodを管理する
   selector:
-    app: mysql-server
+    app: mysql
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql-server
+  name: mysql
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      app: mysql-server
+      app: mysql
+  # podをアップデートするときの動作を定義
+  # Recreateのときはpodは1つしか存在できず、更新すると古いものが消え新しいものが再度作成される
   strategy:
     type: Recreate
-  template:
+  template: # podの定義
     metadata:
       labels:
-        app: mysql-server
+        app: mysql
     spec:
       containers:
         - image: mysql:latest
           name: mysql
           resources:
+            limits:
+              cpu: 200m
+              memory: 500Mi
           env:
             - name: MYSQL_USER
               valueFrom:
@@ -52,7 +60,7 @@ spec:
           ports:
             - containerPort: 3306
               name: mysql
-          volumeMounts:
+          volumeMounts: # コンテナ内のどのディレクトリにpersistentVolumeをマウントするか
             - name: mysql-server-initdb
               mountPath: /docker-entrypoint-initdb.d
             - name: mysql-server-conf
