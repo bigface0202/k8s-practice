@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template
 
 # Vueビルド結果のフォルダを指定
-app = Flask(__name__, static_folder='html/static', template_folder='html')
+app = Flask(__name__, static_folder='../vue/dist', template_folder='../vue/dist')
 
 # SPA対応
 @app.route('/', defaults={'path': ''})
