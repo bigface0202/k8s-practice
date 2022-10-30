@@ -1,33 +1,31 @@
 <template>
-  <div class="hello">
-    <h1>[[ msg ]]</h1>
-    
+  <div class="home">
+    <img class="home__img" src="@/assets/img/top.jpg" />
+    <profile />
   </div>
 </template>
 
 <script>
+import Profile from '@/components/home/profile.vue'
+
 export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
+  components: {
+    Profile
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
+<style lang="scss" scoped>
+@import '@/assets/sass/colors.scss';
+@import '@/assets/sass/size.scss';
+
+.home {
+  &__img {
+    max-width: 900px;
+    max-height: 560px;
+  }
 }
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+
+
 </style>
