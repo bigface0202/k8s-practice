@@ -49,7 +49,7 @@ spec:
   selector:
     matchLabels:
       app: myapp
-  replicas: 1 # tells deployment to run 2 pods matching the template
+  replicas: 1 # tells deployment to run 1 pods matching the template
   template:
     metadata:
         name: myapp
@@ -61,7 +61,7 @@ spec:
         - name: artifact-registry
       containers:
         - name: myapp
-          image: asia-northeast1-docker.pkg.dev/sacred-lane-365413/kishi-reg/flask_myapp:v1.1
+          image: bigface00/myapp:v1.3
           ports:
           - containerPort: 8080
           livenessProbe:
