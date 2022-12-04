@@ -1,45 +1,3 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: myapp-space
----
-apiVersion: metallb.io/v1beta1
-kind: IPAddressPool
-metadata:
-  name: pool-ips
-  namespace: metallb-system
-spec:
-  addresses:
-  - 192.168.1.210-192.168.1.215 # 外部IPレンジ（この中から適当に外部IPが選ばれる）
-  autoAssign: true
----
-apiVersion: metallb.io/v1beta1
-kind: L2Advertisement
-metadata:
-  name: pool-ips
-  namespace: metallb-system
-spec:
-  ipAddressPools:
-  - pool-ips
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: nginx-service-lb # Service(LoadBalancer) の名前
-  namespace: myapp-space
-  annotations:
-    metallb.universe.tf/address-pool: pool-ips # MetallbのIPプール名
-spec:
-  type: LoadBalancer
-  ports:
-    - name: nginx-service-lb
-      protocol: TCP
-      port: 8080 # ServiceのIPでlistenするポート
-      nodePort: 30080 # nodeのIPでlistenするポート（30000-32767）
-      targetPort: 8080 # 転送先(コンテナ)でlistenしているPort番号のポート
-  selector: # service のselctorは、matchLabels 扱いになる
-    app: myapp # 転送先の Pod のラベル
----
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
 metadata:
@@ -49,7 +7,7 @@ spec:
   selector:
     matchLabels:
       app: myapp
-  replicas: 1 # tells deployment to run 1 pods matching the template
+  replicas: 2 # tells deployment to run 1 pods matching the template
   template:
     metadata:
         name: myapp
@@ -70,5 +28,3 @@ spec:
               path: /
             failureThreshold: 5
             periodSeconds: 5
-      nodeSelector: # Podを乗せるノードをラベルから指定できる
-        kubernetes.io/hostname: work01

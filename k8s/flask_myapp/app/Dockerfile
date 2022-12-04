@@ -20,6 +20,6 @@ COPY --from=vue-build /app/dist ./html
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-# gunicornを使ってWebサーバー起動
+# Execute web server by gunicorn
 ENV PORT 8080
 CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 main:app

@@ -1,0 +1,36 @@
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: pool-ips
+  namespace: metallb-system
+spec:
+  addresses:
+  - 192.168.1.210-192.168.1.215 # 外部IPレンジ（この中から適当に外部IPが選ばれる）
+  autoAssign: true
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: pool-ips
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+  - pool-ips
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-service-lb # Service(LoadBalancer) の名前
+  namespace: myapp-space
+  annotations:
+    metallb.universe.tf/address-pool: pool-ips # MetallbのIPプール名
+spec:
+  type: LoadBalancer
+  ports:
+    - name: myapp-service-lb
+      protocol: TCP
+      port: 8080 # ServiceのIPでlistenするポート
+      nodePort: 30080 # nodeのIPでlistenするポート（30000-32767）
+      targetPort: 8080 # 転送先(コンテナ)でlistenしているPort番号のポート
+  selector: # service のselctorは、matchLabels 扱いになる
+    app: myapp # 転送先の Pod のラベル
